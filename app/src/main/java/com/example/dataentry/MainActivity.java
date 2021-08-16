@@ -45,13 +45,14 @@ public class MainActivity extends AppCompatActivity implements Entry_Adapter.Ite
         client_img = findViewById(R.id.client_img);
         sub_btn = findViewById(R.id.sub_btn);
         floating_btn_add = findViewById(R.id.floating_btn_add);
-        backup = uri = Uri.parse("android.resource://your.package.here/drawable/ic_baseline_person_24.xml");
+        backup = Uri.parse("android.resource://your.package.here/drawable/ic_baseline_person_24.xml");
+        uri = Uri.parse("android.resource://your.package.here/drawable/ic_baseline_person_24.xml");
 
         recyclerView=findViewById(R.id.listView);
         recyclerView.setHasFixedSize(true);
         layoutManager=new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        Entry_Adapter myadapter=new Entry_Adapter(MainActivity.this, ApplicationClass.items);
+        Entry_Adapter  myadapter=new Entry_Adapter(MainActivity.this, ApplicationClass.items);
         recyclerView.setAdapter(myadapter);
 
         sub_btn.setOnClickListener(new View.OnClickListener() {
@@ -68,11 +69,13 @@ public class MainActivity extends AppCompatActivity implements Entry_Adapter.Ite
                     try {
                         db.open();
                         db.createEntry(client_name.getText().toString().trim(), client_email_id.getText().toString().trim(),uri.toString());
-                        db.close();
                         ApplicationClass.items.add(new data_items(client_name.getText().toString(),client_email_id.getText().toString(),uri.toString()));
+                        myadapter.notifyDataSetChanged();
+                        db.close();
                         client_name.setText("");
                         client_email_id.setText("");
                         client_img.setImageURI(backup);
+                        uri = Uri.parse("android.resource://your.package.here/drawable/ic_baseline_person_24.xml");
                     } catch (SQLException throwables) {
                         throwables.printStackTrace();
                     }
@@ -106,14 +109,14 @@ public class MainActivity extends AppCompatActivity implements Entry_Adapter.Ite
 
     @Override
     public void onDeleteClick(int index) {
-        ApplicationClass.items.remove(index);
+        /*ApplicationClass.items.remove(index);
         database_store db = new database_store(this);
         try {
             db.open();
-            db.deleteEntry(Integer.toString(index+1));
+            db.deleteEntry(Integer.toString(index));
             db.close();
         } catch (SQLException e) {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
+        }*/
     }
 }
